@@ -1,0 +1,1 @@
+# sisu-hugo-static-wordpress
