@@ -1,12 +1,14 @@
 #!/bin/sh
 
-WP_USER='wordpress',
-WP_PW='wordpress',
-WP_THEME_DIR='dummy-theme',
-WP_THEME_NAME='dummy-theme',
-WP_EMAIL='admin@wordpress.dev',
-WP_DB_NAME='wordpress',
-WP_DESCRIPTION='Yet another decoupled wordpress install',
+alias wp="docker-compose run --rm my-wpcli"
+
+WP_USER="wordpress"
+WP_PW="wordpress"
+WP_THEME_DIR="dummy-theme"
+WP_THEME_NAME="dummy-theme"
+WP_EMAIL="test@test.com"
+WP_DB_NAME="wordpress"
+WP_DESCRIPTION="Yet another decoupled wordpress install"
 
 # wp core download --version=4.9.2 --locale=en_US --force
 
@@ -15,10 +17,10 @@ WP_DESCRIPTION='Yet another decoupled wordpress install',
 # wp db drop --yes
 # wp db create --yes
 
-wp core install --url=localhost:8000 --title=$WP_THEME_NAME --admin_user=$WP_USER --admin_password=$WP_PW --admin_email=$WP_EMAIL --skip-email --yes
+wp core install --url=localhost:8000 --title=$WP_THEME_NAME --admin_user=$WP_USER --admin_password=$WP_PW --admin_email=$WP_EMAIL
 
-wp theme activate $WP_THEME_DIR --yes
+# wp theme activate $WP_THEME_DIR --yes
 
-wp plugin activate --all --yes
+wp plugin activate --all
 
 # wp acf sync

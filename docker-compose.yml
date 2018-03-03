@@ -8,11 +8,13 @@ services:
     restart: always
     ports:
       - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: somewordpress
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
+    env_file:
+      - ./variables.env
+    # environment:
+    #   MYSQL_ROOT_PASSWORD: somewordpress
+    #   MYSQL_DATABASE: wordpress
+    #   MYSQL_USER: wordpress
+    #   MYSQL_PASSWORD: wordpress
 
   wordpress:
     depends_on:
@@ -24,10 +26,27 @@ services:
     ports:
       - "8000:80"
     restart: always
-    environment:
-      WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: wordpress
+    env_file:
+      - ./variables.env
+    # environment:
+    #   WORDPRESS_DB_HOST: db:3306
+    #   WORDPRESS_DB_USER: wordpress
+    #   WORDPRESS_DB_PASSWORD: wordpress
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    depends_on:
+      - db
+    # networks:
+    #   - back
+    ports:
+      - 8181:80
+    env_file:
+      - ./variables.env
+    # environment:
+    #   MYSQL_USERNAME: wordpress
+    #   MYSQL_ROOT_PASSWORD: somewordpress
+    #   PMA_HOST: db:3306
 
   my-wpcli:
     image: tatemz/wp-cli
@@ -41,38 +60,38 @@ services:
   wp-listener:
     build: wp-listener
     command: node_modules/.bin/nodemon server.js
-    # env_file:
-    #   - ./wp-listener/variables.env
+    env_file:
+      - ./variables.env
     ports:
       - '3000:3000'
     volumes:
       - ./wp-listener:/home/app-user/app
       - /home/app-user/app/node_modules
-    environment:
-      NODE_ENV: development
-      BUILDER_PORT: 3030
-      WORDPRESS_HOST: 8080
-      LISTENER_PORT: 3000
+    # environment:
+    #   NODE_ENV: development
+    #   BUILDER_PORT: 3030
+    #   WORDPRESS_HOST: 8080
+    #   LISTENER_PORT: 3000
 
   hugo-builder:
     build: hugo-builder
     command: node_modules/.bin/nodemon server.js
-    # env_file:
-    #   - ./hugo-builder/variables.env
+    env_file:
+      - ./variables.env
     ports:
         - '3030:3030'
     volumes:
         - ./hugo-builder:/home/app-user/app
         - /home/app-user/app/node_modules
-    environment:
-      NODE_ENV: development
-      BUILDER_PORT: 3030
-      WORDPRESS_HOST: 8080
-      LISTENER_PORT: 3000
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: wordpress
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
+    # environment:
+    #   NODE_ENV: development
+    #   BUILDER_PORT: 3030
+    #   WORDPRESS_HOST: 8080
+    #   LISTENER_PORT: 3000
+    #   WORDPRESS_DB_USER: wordpress
+    #   WORDPRESS_DB_PASSWORD: wordpress
+    #   MYSQL_USER: wordpress
+    #   MYSQL_PASSWORD: wordpress
 
 volumes:
   db_data:
