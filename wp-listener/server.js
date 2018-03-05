@@ -9,9 +9,11 @@ const Md = require('./wares/createMarkdown');
 // Constants
 const PORT = process.env.LISTENER_PORT;
 const BUILDER_PORT = process.env.BUILDER_PORT;
-const WP_URL = process.env.WP_URL;
+const WP_HOST = process.env.WORDPRESS_HOST;
+const WP_JSON_API = 'wp-json/wp/v2';
+const WP_URL = `http://wp:${WP_HOST}/${WP_JSON_API}`
 const HOST = '0.0.0.0';
-const builderUri = `http://hugo-builder:${BUILDER_PORT}/`;
+const builderUri = `http://builder:${BUILDER_PORT}/`;
 
 // Constructors
 const hugoTransmitter = new HugoTransmitter(builderUri);
