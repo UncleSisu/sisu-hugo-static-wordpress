@@ -1,18 +1,22 @@
-# see: http://jdlm.info/articles/2016/03/06/lessons-building-node-app-docker.html
-
-# TODO: adding user screws up permissions right now
-# NB: Remember this is not a Debian environs
 FROM mhart/alpine-node:latest
 
-# RUN useradd --user-group --create-home --shell /bin/false app-user
-
+ENV user myuser
 ENV HOME=/home/app-user
 
+# set user right away for determinism
+RUN addgroup -g 1000 -S $user \
+  && adduser -u 1000 -S $user -G $user
+
+# create directory for persistence and give our user ownership
+RUN mkdir -p $HOME/app \
+  && chown -R $user:$user $HOME \
+  && chown -R $user:$user $HOME/app
+
 COPY package.json $HOME/app/
-# RUN chown -R app-user:app-user $HOME/*
 
-# USER app-user
 WORKDIR $HOME/app
-RUN npm install
+USER $user
 
+# RUN yarn
+RUN npm install
 CMD ["npm", "start"]
