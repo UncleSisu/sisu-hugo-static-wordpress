@@ -1,0 +1,3 @@
+[submodule "wp-content/plugins/pressword"]
+	path = wp-content/plugins/pressword
+	url = https://github.com/blakesisu/wp-hugopress.git
